@@ -1,103 +1,204 @@
-import Image from "next/image";
 
-export default function Home() {
+// src/app/page.tsx
+"use client";
+
+import { useState, useEffect, useCallback } from 'react';
+import GameBoyFrame from '@/components/gameboy-frame';
+import ScreenComponent from '@/components/screen-component';
+import ControlsComponent from '@/components/controls-component';
+import ParallaxBackground from '@/components/parallax-background';
+import type { Project, ScreenView } from '@/types';
+import { useToast } from "@/hooks/use-toast";
+import { Github, Linkedin, Figma, Download, Instagram } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+
+// Static project data, replace with actual data or fetch from an API
+const initialProjects: Project[] = [
+  {
+    id: '1',
+    name: 'Portfolio V1',
+    shortDescription: 'My first personal website.',
+    description: 'This was my initial foray into web development, a static HTML/CSS site showcasing early projects. It taught me the fundamentals of web structure and styling.',
+    technologies: ['HTML', 'CSS', 'JavaScript'],
+    imageUrl: 'https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMnx8YWJzdHJhY3R8ZW58MHx8fHwxNzQ5NTY5MzU5fDA&ixlib=rb-4.1.0&q=80&w=1080',
+    dataAiHint: 'code screen',
+    liveLink: '#',
+    repoLink: '#'
+  },
+  {
+    id: '2',
+    name: 'Task Manager App',
+    shortDescription: 'A React-based to-do list.',
+    description: 'A dynamic task management application built with React and local storage for persistence. Features include adding, deleting, and marking tasks as complete.',
+    technologies: ['React', 'JavaScript', 'CSS'],
+    imageUrl: 'https://placehold.co/280x252.png',
+    dataAiHint: 'checklist interface',
+    liveLink: '#',
+    repoLink: '#'
+  },
+  {
+    id: '3',
+    name: 'Pixel Art Editor',
+    shortDescription: 'Online retro art tool.',
+    description: 'A browser-based pixel art editor created with vanilla JavaScript and HTML5 Canvas. Users can draw, erase, and save their pixel creations.',
+    technologies: ['JavaScript', 'HTML5 Canvas', 'CSS'],
+    imageUrl: 'https://placehold.co/280x252.png',
+    dataAiHint: 'pixel grid',
+    liveLink: '#',
+    repoLink: '#'
+  },
+   {
+    id: '4',
+    name: 'Weather Dashboard',
+    shortDescription: 'Real-time weather info.',
+    description: 'A weather dashboard that fetches and displays real-time weather data from a third-party API based on user location or search.',
+    technologies: ['JavaScript', 'REST API', 'Bootstrap'],
+    imageUrl: 'https://placehold.co/280x252.png',
+    dataAiHint: 'weather icons',
+    liveLink: '#',
+    repoLink: '#'
+  },
+];
+
+const YOUR_NAME = "Kishore\u00A0M";
+const YOUR_ROLE = "Game developer, UI/UX designer, 3D Artist";
+
+const konamiCodeSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+
+export default function HomePage() {
+  const [currentView, setCurrentView] = useState<ScreenView>('landing');
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const { toast } = useToast();
+  const [userInputSequence, setUserInputSequence] = useState<string[]>([]);
+  const [hasLandingAnimationPlayed, setHasLandingAnimationPlayed] = useState(false);
+
+  useEffect(() => {
+    // Simulate fetching projects or use initial data
+    setProjects(initialProjects);
+  }, []);
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
+
+  const handleKonamiInput = useCallback((key: string) => {
+    setUserInputSequence(prevSequence => {
+      const newSequence = [...prevSequence, key].slice(-konamiCodeSequence.length);
+      if (JSON.stringify(newSequence) === JSON.stringify(konamiCodeSequence)) {
+        toast({
+          title: "KONAMI CODE!",
+          description: "You found the retro secret! 🎉",
+          variant: "default",
+        });
+        import('canvas-confetti').then(confettiModule => {
+          const runConfetti = confettiModule.default || confettiModule;
+          if (typeof runConfetti === 'function') {
+            runConfetti({
+              particleCount: 150,
+              spread: 90,
+              origin: { y: 0.6 },
+              zIndex: 9999
+            });
+          } else {
+            console.error("Failed to load confetti function");
+          }
+        }).catch(error => {
+          console.error("Error loading confetti:", error);
+        });
+        return []; // Reset sequence after successful entry
+      }
+      return newSequence;
+    });
+  }, [toast]); 
+
+  // Konami Code Listener for Keyboard
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      let processedKey = event.key;
+      if (event.key.toLowerCase() === 'b') {
+        processedKey = 'b';
+      } else if (event.key.toLowerCase() === 'a') {
+        processedKey = 'a';
+      }
+      if (konamiCodeSequence.includes(processedKey)) {
+        handleKonamiInput(processedKey);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleKonamiInput]);
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
+
+  const navigateTo = (view: ScreenView, projectId?: string) => {
+    setCurrentView(view);
+    if (projectId) {
+      setSelectedProjectId(projectId);
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
+    <div className="flex flex-col h-screen overflow-hidden">
+      <ParallaxBackground />
+      <main className="relative z-10 flex-grow flex flex-col items-center justify-center p-2 sm:p-4 font-body">
+        <a 
+          href="/resume.pdf" 
+          download={`${YOUR_NAME.toLowerCase().replace(/\s+/g, '-')}-resume.pdf`} 
+          className="absolute top-4 right-4 sm:top-6 sm:right-6 z-20"
+          aria-label="Download Resume"
+        >
+          <Button variant="outline" size="sm" className="bg-background/80 hover:bg-background">
+            <Download className="mr-2 h-4 w-4" />
+            Resume
+          </Button>
+        </a>
+        <GameBoyFrame>
+          <ScreenComponent
+            currentView={currentView}
+            projects={projects}
+            selectedProjectId={selectedProjectId}
+            navigateTo={navigateTo}
+            name={YOUR_NAME}
+            role={YOUR_ROLE}
+            hasLandingAnimationPlayed={hasLandingAnimationPlayed}
+            setHasLandingAnimationPlayed={setHasLandingAnimationPlayed}
+          />
+          <ControlsComponent
+            navigateTo={navigateTo}
+            currentView={currentView}
+            toggleTheme={toggleTheme}
+            handleKonamiInput={handleKonamiInput}
+          />
+        </GameBoyFrame>
+      </main>
+      <footer className="relative z-10 text-center text-xxs text-foreground/70 dark:text-foreground/50 py-2 shrink-0">
+        <div className="flex justify-center space-x-4 mt-1"> {/* Reduced margin-top slightly */}
+          <a href="https://github.com/code-grafiki" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile" className="text-foreground/70 hover:text-foreground dark:text-foreground/50 dark:hover:text-foreground/80 transition-colors">
+            <Github size={20} />
           </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
+          <a href="https://linkedin.com/in/kishore-m-016b38204" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" className="text-foreground/70 hover:text-foreground dark:text-foreground/50 dark:hover:text-foreground/80 transition-colors">
+            <Linkedin size={20} />
+          </a>
+          <a href="https://www.figma.com/@polygrafikos" target="_blank" rel="noopener noreferrer" aria-label="Figma Profile" className="text-foreground/70 hover:text-foreground dark:text-foreground/50 dark:hover:text-foreground/80 transition-colors">
+            <Figma size={20} />
+          </a>
+          <a href="https://www.instagram.com/polygrafikos/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Profile" className="text-foreground/70 hover:text-foreground dark:text-foreground/50 dark:hover:text-foreground/80 transition-colors">
+            <Instagram size={20} />
           </a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
       </footer>
     </div>
   );
 }
+
