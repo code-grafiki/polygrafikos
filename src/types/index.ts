@@ -5,7 +5,6 @@ export interface Project {
   description: string;
   technologies: string[];
   imageUrl: string;
-  dataAiHint?: string;
   liveLink?: string;
   repoLink?: string;
 }

@@ -12,51 +12,50 @@ import { useToast } from "@/hooks/use-toast";
 import { Github, Linkedin, Figma, Download, Instagram } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 
-// Static project data, replace with actual data or fetch from an API
 const initialProjects: Project[] = [
   {
     id: '1',
-    name: 'Portfolio V1',
-    shortDescription: 'My first personal website.',
-    description: 'This was my initial foray into web development, a static HTML/CSS site showcasing early projects. It taught me the fundamentals of web structure and styling.',
-    technologies: ['HTML', 'CSS', 'JavaScript'],
-    imageUrl: 'https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMnx8YWJzdHJhY3R8ZW58MHx8fHwxNzQ5NTY5MzU5fDA&ixlib=rb-4.1.0&q=80&w=1080',
-    dataAiHint: 'code screen',
-    liveLink: '#',
-    repoLink: '#'
+    name: 'Offline RAG application',
+    shortDescription: 'Offline RAG application.',
+    description: 'A local RAG (Retrieval-Augmented Generation) application built with Streamlit and LangChain. This application allows you to create a local knowledge base from your documents and interact with it using various LLM models through Ollama.',
+    technologies: ['streamlit', 'LangChain', 'Ollama'],
+    imageUrl: '/images/rag.png',
+    repoLink: 'https://github.com/code-grafiki/Offline-RAG-Application'
   },
   {
     id: '2',
-    name: 'Task Manager App',
-    shortDescription: 'A React-based to-do list.',
-    description: 'A dynamic task management application built with React and local storage for persistence. Features include adding, deleting, and marking tasks as complete.',
-    technologies: ['React', 'JavaScript', 'CSS'],
-    imageUrl: 'https://placehold.co/280x252.png',
-    dataAiHint: 'checklist interface',
-    liveLink: '#',
-    repoLink: '#'
+    name: '2D Platformer',
+    shortDescription: 'A platformer adventure game.',
+    description: 'A platformer adventure game made with unity, player navigate through small puzzles, defeat enemies, avoid spikes to reach the goal.',
+    technologies: ['Unity', 'C#', 'Aseprite'],
+    imageUrl: '/images/2dplatformer.png',
+    repoLink: 'https://github.com/code-grafiki/2d-Player-Controller'
   },
   {
     id: '3',
-    name: 'Pixel Art Editor',
-    shortDescription: 'Online retro art tool.',
-    description: 'A browser-based pixel art editor created with vanilla JavaScript and HTML5 Canvas. Users can draw, erase, and save their pixel creations.',
-    technologies: ['JavaScript', 'HTML5 Canvas', 'CSS'],
-    imageUrl: 'https://placehold.co/280x252.png',
-    dataAiHint: 'pixel grid',
-    liveLink: '#',
+    name: 'Pixel 2 Plates',
+    shortDescription: 'Recipe generator app.',
+    description: 'A recipie generator application where user uploads the ingredient images and through gemini api the application will provide a recipe.',
+    technologies: ['Streamlit', 'GeminiAPI', 'Figma(ui design)'],
+    imageUrl: '/images/recipegen.png',
     repoLink: '#'
   },
-   {
+  {
     id: '4',
-    name: 'Weather Dashboard',
-    shortDescription: 'Real-time weather info.',
-    description: 'A weather dashboard that fetches and displays real-time weather data from a third-party API based on user location or search.',
-    technologies: ['JavaScript', 'REST API', 'Bootstrap'],
-    imageUrl: 'https://placehold.co/280x252.png',
-    dataAiHint: 'weather icons',
-    liveLink: '#',
-    repoLink: '#'
+    name: 'Snow Boarding',
+    shortDescription: '2D snow boarding game',
+    description: 'a 2D snow boarding game where user have to finish the snow boarding course before the time ends without falling over.',
+    technologies: ['unity', 'C#',],
+    imageUrl: '/images/boarding.png',
+  },
+  {
+    id: '5',
+    name: 'GamePortal',
+    shortDescription: 'E commerce ui design.',
+    description: 'During my internship, I designed an e-commerce website and conducted a comprehensive UX case study. I researched user needs, created wireframes and prototypes, and iterated on the design based on usability feedback to enhance the overall shopping experience.',
+    technologies: ['Figma (wireframe, design, prototype)'],
+    imageUrl: '/images/gameportal.png',
+    repoLink: 'https://www.figma.com/community/file/1317869431291251276'
   },
 ];
 
