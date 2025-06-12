@@ -1,7 +1,6 @@
-import type {NextConfig} from 'next';
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -9,6 +8,7 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -24,6 +24,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  output: 'export', 
+  trailingSlash: true, 
+  basePath: '/polygrafikos', 
 };
 
 export default nextConfig;
