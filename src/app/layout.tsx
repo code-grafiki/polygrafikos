@@ -6,8 +6,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 
 
 export const metadata: Metadata = {
-  title: 'GameBoy Folio',
-  description: 'A retro-themed portfolio by Your Name',
+  title: 'Polygrafikos',
+  description: 'A retro-themed portfolio by Polygrafikos',
 };
 
 export default function RootLayout({

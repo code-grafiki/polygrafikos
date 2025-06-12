@@ -46,7 +46,7 @@ const initialProjects: Project[] = [
     shortDescription: '2D snow boarding game',
     description: 'a 2D snow boarding game where user have to finish the snow boarding course before the time ends without falling over.',
     technologies: ['unity', 'C#',],
-    imageUrl: '/images/boarding.png',
+    imageUrl: '/images/Boarding.png',
   },
   {
     id: '5',
