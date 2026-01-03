@@ -27,6 +27,7 @@ export default function RootLayout({
       <body className="font-body antialiased">
         {children}
         <Toaster />
+        <SpeedInsights />
       </body>
     </html>
   );
