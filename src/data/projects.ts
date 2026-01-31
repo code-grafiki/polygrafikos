@@ -1,0 +1,53 @@
+import type { Project } from '@/types';
+
+export const projects: Project[] = [
+  {
+    id: '1',
+    name: 'Offline RAG application',
+    shortDescription: 'Offline RAG application.',
+    description: 'A local RAG (Retrieval-Augmented Generation) application built with Streamlit and LangChain. This application allows you to create a local knowledge base from your documents and interact with it using various LLM models through Ollama.',
+    technologies: ['streamlit', 'LangChain', 'Ollama'],
+    imageUrl: '/images/rag.png',
+    repoLink: 'https://github.com/code-grafiki/Offline-RAG-Application',
+    dataAiHint: 'technology software',
+  },
+  {
+    id: '2',
+    name: '2D Platformer',
+    shortDescription: 'A platformer adventure game.',
+    description: 'A platformer adventure game made with unity, player navigate through small puzzles, defeat enemies, avoid spikes to reach the goal.',
+    technologies: ['Unity', 'C#', 'Aseprite'],
+    imageUrl: '/images/2dplatformer.png',
+    repoLink: 'https://github.com/code-grafiki/2d-Player-Controller',
+    dataAiHint: 'game screenshot',
+  },
+  {
+    id: '3',
+    name: 'Pixel 2 Plates',
+    shortDescription: 'Recipe generator app.',
+    description: 'A recipie generator application where user uploads the ingredient images and through gemini api the application will provide a recipe.',
+    technologies: ['Streamlit', 'GeminiAPI', 'Figma(ui design)'],
+    imageUrl: '/images/recipegen.png',
+    repoLink: '#',
+    dataAiHint: 'application interface',
+  },
+  {
+    id: '4',
+    name: 'Snow Boarding',
+    shortDescription: '2D snow boarding game',
+    description: 'a 2D snow boarding game where user have to finish the snow boarding course before the time ends without falling over.',
+    technologies: ['unity', 'C#'],
+    imageUrl: '/images/Boarding.png',
+    dataAiHint: 'game screenshot',
+  },
+  {
+    id: '5',
+    name: 'GamePortal',
+    shortDescription: 'E commerce ui design.',
+    description: 'During my internship, I designed an e-commerce website and conducted a comprehensive UX case study. I researched user needs, created wireframes and prototypes, and iterated on the design based on usability feedback to enhance the overall shopping experience.',
+    technologies: ['Figma (wireframe, design, prototype)'],
+    imageUrl: '/images/gameportal.png',
+    repoLink: 'https://www.figma.com/community/file/1317869431291251276',
+    dataAiHint: 'ui design mockup',
+  },
+];

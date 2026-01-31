@@ -7,6 +7,7 @@ export interface Project {
   imageUrl: string;
   liveLink?: string;
   repoLink?: string;
+  dataAiHint?: string;
 }
 
-export type ScreenView = 'landing' | 'about' | 'projects' | `project-${string}` | 'contact';
+export type ScreenView = 'landing' | 'about' | 'projects' | 'contact' | `project-${string}`;

@@ -1,9 +1,10 @@
+"use client";
 
+import React, { memo } from 'react';
 import { Button } from '@/components/ui/button';
 import type { ScreenView } from '@/types';
 import { Mail, Home, User, Archive } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
-
 import {
   Tooltip,
   TooltipContent,
@@ -18,10 +19,40 @@ interface ControlsComponentProps {
   handleKonamiInput: (key: string) => void;
 }
 
-export default function ControlsComponent({ navigateTo, currentView, toggleTheme, handleKonamiInput }: ControlsComponentProps) {
+const dPadButtonStyle = "w-10 h-10 sm:w-12 sm:h-12 p-2 bg-primary text-primary-foreground hover:bg-primary/90 border border-primary/50 flex items-center justify-center shadow-md";
+
+const ControlsComponent: React.FC<ControlsComponentProps> = ({ 
+  navigateTo, 
+  currentView, 
+  toggleTheme, 
+  handleKonamiInput 
+}) => {
   const { toast } = useToast();
 
-  const dPadButtonStyle = "w-10 h-10 sm:w-12 sm:h-12 p-2 bg-primary text-primary-foreground hover:bg-primary/90 border border-primary/50 flex items-center justify-center shadow-md";
+  const handleBack = () => {
+    handleKonamiInput('b');
+    if (currentView.startsWith('project-')) {
+      navigateTo('projects');
+    } else if (currentView === 'projects' || currentView === 'about' || currentView === 'contact') {
+      navigateTo('landing');
+    }
+  };
+
+  const handleActionA = () => {
+    handleKonamiInput('a');
+    if (currentView === 'contact') {
+      // Dispatch custom event to trigger form submission
+      window.dispatchEvent(new CustomEvent('submit-contact-form'));
+    }
+    // No action for other views - button is disabled or does nothing
+  };
+
+  const isBackButton = currentView.startsWith('project-') || 
+                       currentView === 'projects' || 
+                       currentView === 'about' || 
+                       currentView === 'contact';
+
+  const isActionButtonActive = currentView === 'contact';
 
   return (
     <div className="px-1 sm:px-2 select-none pb-6">
@@ -100,52 +131,27 @@ export default function ControlsComponent({ navigateTo, currentView, toggleTheme
         <div className="flex items-center space-x-3 sm:space-x-4 relative -top-4">
           <div className="flex flex-col items-center">
             <Button
-              onClick={() => {
-                handleKonamiInput('b');
-                if (currentView.startsWith('project-')) {
-                  navigateTo('projects');
-                } else if (currentView === 'projects' || currentView === 'about' || currentView === 'contact') {
-                  navigateTo('landing');
-                } else { // Landing view
-                   toast({ title: "Action B", description: "B button pressed!", variant: "default"});
-                }
-              }}
+              onClick={handleBack}
               className="gb-button rounded-full w-12 h-12 sm:w-14 sm:h-14 bg-primary text-primary-foreground hover:bg-primary/90 border-primary/50"
-              aria-label={currentView.startsWith('project-') || currentView === 'projects' || currentView === 'about' || currentView === 'contact' ? "Back" : "Action B"}
+              aria-label={isBackButton ? "Back" : "Back button"}
             >
               <span className="text-base sm:text-lg leading-none">B</span>
             </Button>
             <span className="text-xxs sm:text-xs text-muted-foreground mt-1">
-              {currentView.startsWith('project-') || currentView === 'projects' || currentView === 'about' || currentView === 'contact' ? "BACK" : "B"}
+              {isBackButton ? "BACK" : ""}
             </span>
           </div>
           <div className="flex flex-col items-center">
             <Button
-              onClick={() => {
-                handleKonamiInput('a');
-                if (currentView === 'contact') {
-                  const form = document.querySelector('form');
-                  if (form) {
-                    const nameInput = form.querySelector('input[name="name"]') as HTMLInputElement;
-                    const emailInput = form.querySelector('input[name="email"]') as HTMLInputElement;
-                    const messageInput = form.querySelector('textarea[name="message"]') as HTMLTextAreaElement;
-                    if (nameInput?.value && emailInput?.value && messageInput?.value) {
-                      form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
-                    } else {
-                      toast({ title: "Form Incomplete", description: "Please fill all fields in the contact form.", variant: "destructive"});
-                    }
-                  }
-                } else {
-                  toast({ title: "Action A", description: "A button pressed!", variant: "default"});
-                }
-              }}
-              className="gb-button rounded-full w-12 h-12 sm:w-14 sm:h-14 bg-red-600 hover:bg-red-600/90 text-white border-red-700/50"
-              aria-label={currentView === 'contact' ? "Submit Contact Form" : "Action A"}
+              onClick={handleActionA}
+              disabled={!isActionButtonActive}
+              className="gb-button rounded-full w-12 h-12 sm:w-14 sm:h-14 bg-red-600 hover:bg-red-600/90 text-white border-red-700/50 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label={currentView === 'contact' ? "Submit Contact Form" : "A button"}
             >
               <span className="text-base sm:text-lg leading-none">A</span>
             </Button>
              <span className="text-xxs sm:text-xs text-muted-foreground mt-1">
-              {currentView === 'contact' ? "SEND" : "A"}
+              {currentView === 'contact' ? "SEND" : ""}
             </span>
           </div>
         </div>
@@ -186,4 +192,6 @@ export default function ControlsComponent({ navigateTo, currentView, toggleTheme
       </div>
     </div>
   );
-}
+};
+
+export default memo(ControlsComponent);
